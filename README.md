@@ -2,6 +2,8 @@
 
 A comprehensive full-stack application that scrapes blog articles, enhances them using AI, and displays both original and optimized versions through a modern React interface.
 
+Live Website - https://beyondchats-internship-assignment-eight.vercel.app
+
 ## 🎯 Project Overview
 
 This project demonstrates an end-to-end article optimization pipeline:
@@ -277,39 +279,6 @@ npm run optimize   # Optimize articles with AI
 npm start          # Start development server
 npm run build      # Build for production
 npm test           # Run tests
-```
-
-## 🚀 Deployment
-
-### Backend Deployment (Heroku/Railway)
-
-1. Set environment variables in platform dashboard
-2. Deploy from GitHub repository
-3. Update `API_BASE_URL` in frontend
-
-### Frontend Deployment (Vercel/Netlify)
-
-1. Build the project: `npm run build`
-2. Deploy `build` folder
-3. Update API URL to production backend URL
-
-## 🧪 Testing
-
-### Test Backend API
-
-```bash
-# Get all articles
-curl http://localhost:5000/api/articles
-
-# Get single article
-curl http://localhost:5000/api/articles/:id
-```
-
-### Test Individual Components
-
-```bash
-# Test specific article optimization
-npm run optimize 0  # Optimizes first article only
 ```
 
 ## 🤝 Contributing
