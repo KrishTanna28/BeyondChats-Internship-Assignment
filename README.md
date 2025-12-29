@@ -123,7 +123,7 @@ BeyondChats/
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/KrishTanna28/BeyondChats-Internship-Assignment
 cd BeyondChats
 ```
 
@@ -240,11 +240,6 @@ Frontend runs on `http://localhost:3000`
 - **Original Tab**: Displays the original article content
 - Seamless switching between versions
 
-### Dark Theme
-- Professional black background (#000000)
-- Optimized for readability
-- Consistent design language
-
 ### Responsive Design
 - Grid layout adapts to screen size
 - Mobile-friendly interface
@@ -316,14 +311,6 @@ curl http://localhost:5000/api/articles/:id
 # Test specific article optimization
 npm run optimize 0  # Optimizes first article only
 ```
-
-## 🎯 Evaluation Criteria Coverage
-
-- ✅ **Completeness (40%)**: All features implemented - scraping, AI optimization, CRUD API, frontend
-- ✅ **README & Docs (25%)**: Comprehensive documentation with setup, architecture, and data flow
-- ✅ **UI/UX (15%)**: Modern dark theme, responsive design, tab interface for comparison
-- ✅ **Live Link (10%)**: Ready for deployment with clear instructions
-- ✅ **Code Quality (10%)**: Clean code, modular structure, error handling
 
 ## 🤝 Contributing
 
