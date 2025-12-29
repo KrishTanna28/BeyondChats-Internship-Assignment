@@ -8,8 +8,6 @@ function initializeGemini(apiKey) {
 
 async function optimizeArticle(originalArticle, referenceArticles) {
   try {
-    console.log('\n🤖 Optimizing article with Gemini AI...');
-
     const prompt = buildPrompt(originalArticle, referenceArticles);
 
     const result = await ai.models.generateContent({
@@ -24,8 +22,6 @@ async function optimizeArticle(originalArticle, referenceArticles) {
 
     const optimizedContent = result.text;
 
-    console.log('  ✓ Article optimization complete');
-
     return {
       title: extractTitle(optimizedContent) || originalArticle.title,
       content: extractContent(optimizedContent),
@@ -36,7 +32,6 @@ async function optimizeArticle(originalArticle, referenceArticles) {
     };
 
   } catch (error) {
-    console.error('Error optimizing with Gemini:', error.message);
     throw error;
   }
 }

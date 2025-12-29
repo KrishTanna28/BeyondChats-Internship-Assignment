@@ -24,6 +24,10 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  original_description: {
+    type: String,
+    default: null
+  },
   tags: {
     type: [String],
     default: []

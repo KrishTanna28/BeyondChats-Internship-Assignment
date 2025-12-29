@@ -12,7 +12,6 @@ async function scrapeArticle(url) {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
     
-    // Extract article details from the individual article page
     const title = $('h1.entry-title').first().text().trim() || 
                   $('h1').first().text().trim();
     
@@ -29,7 +28,6 @@ async function scrapeArticle(url) {
                        $('.entry-content p').first().text().trim() || 
                        '';
     
-    // Extract tags
     const tags = [];
     $('.entry-tags a, .post-tags a, a[rel="tag"]').each((i, elem) => {
       const tag = $(elem).text().trim();
@@ -41,24 +39,21 @@ async function scrapeArticle(url) {
       author,
       date: dateText,
       url,
-      description: description.substring(0, 500), // Limit description length
+      description: description.substring(0, 500),
       tags
     };
   } catch (error) {
-    console.error(`Error scraping ${url}:`, error.message);
     return null;
   }
 }
 
 async function scrapeBlogPage(pageUrl) {
   try {
-    console.log(`Scraping page: ${pageUrl}`);
     const response = await axios.get(pageUrl);
     const $ = cheerio.load(response.data);
     
     const articles = [];
     
-    // Find all article links on the page
     $('h2.entry-title a, h3.entry-title a, article h2 a, .post-title a').each((i, elem) => {
       const articleUrl = $(elem).attr('href');
       if (articleUrl && articleUrl.includes('/blogs/') && !articleUrl.includes('/page/')) {
@@ -66,9 +61,8 @@ async function scrapeBlogPage(pageUrl) {
       }
     });
     
-    return [...new Set(articles)]; // Remove duplicates
+    return [...new Set(articles)];
   } catch (error) {
-    console.error(`Error scraping page ${pageUrl}:`, error.message);
     return [];
   }
 }
@@ -77,51 +71,41 @@ async function scrapeOldestArticles() {
   console.log('Starting to scrape oldest articles from BeyondChats blog...\n');
   
   try {
-    // Get articles from last pages (14 and 15)
     const page15Articles = await scrapeBlogPage('https://beyondchats.com/blogs/page/15/');
     const page14Articles = await scrapeBlogPage('https://beyondchats.com/blogs/page/14/');
     
-    // Combine and get unique URLs
     const allArticleUrls = [...page15Articles, ...page14Articles];
-    const uniqueUrls = [...new Set(allArticleUrls)].slice(0, 5); // Get first 5 unique
+    const uniqueUrls = [...new Set(allArticleUrls)].slice(0, 5);
     
-    console.log(`Found ${uniqueUrls.length} article URLs to scrape\n`);
+    console.log(`Found ${uniqueUrls.length} article URLs to scrape`);
     
     const scrapedArticles = [];
     
     for (const url of uniqueUrls) {
-      console.log(`Scraping: ${url}`);
       const articleData = await scrapeArticle(url);
       
       if (articleData && articleData.title) {
         try {
-          // Check if article already exists
           const existingArticle = await Article.findOne({ url: articleData.url });
           
-          if (existingArticle) {
-            console.log(`  ✓ Article already exists: ${articleData.title}`);
-          } else {
+          if (!existingArticle) {
             const article = new Article(articleData);
             await article.save();
             scrapedArticles.push(article);
-            console.log(`  ✓ Saved: ${articleData.title}`);
+            console.log(`Saved: ${articleData.title}`);
           }
         } catch (error) {
-          console.error(`  ✗ Error saving article: ${error.message}`);
+          console.error(`Error saving article: ${error.message}`);
         }
       }
       
-      // Add delay to avoid overwhelming the server
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
     
-    console.log(`\n✓ Successfully scraped and saved ${scrapedArticles.length} new articles!`);
+    console.log(`\\nSuccessfully scraped and saved ${scrapedArticles.length} new articles!`);
     process.exit(0);
   } catch (error) {
     console.error('Error during scraping:', error);
     process.exit(1);
   }
 }
-
-// Run the scraper
-scrapeOldestArticles();
